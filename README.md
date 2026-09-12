@@ -3,7 +3,7 @@
 ## Process for Agentic oRchestration of symmetriC Engineering
 
 **Architecture-Centric, Role-Orchestrated, Vendor-Neutral Agentic Engineering**  
-**Baseline: 0.0.0**
+**Baseline: 0.0.1**
 
 [English](#english) | [한국어](#한국어)
 

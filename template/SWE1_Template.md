@@ -1,6 +1,6 @@
 # SWE1 Template
 
-**Version:** 0.0.0
+**Version:** 0.0.1
 
 이 문서는 pArc 프로젝트의 **요구·제약·작업 계약 템플릿**입니다. Automotive SPICE SWE.1의 요구사항 분석 개념을 중심으로 하되, 실제 개인/Agentic 프로젝트 운영에 필요한 SUP.8 성격의 형상관리·복구 규칙과 MAN.3 성격의 역할·자원 제약을 함께 담습니다. 프로젝트별 실제 값은 이 템플릿을 복사한 뒤 채웁니다.
 
@@ -9,7 +9,7 @@
 | 항목 | 값 |
 |---|---|
 | Project | TBD |
-| Baseline | 0.0.0 |
+| Baseline | 0.0.1 |
 | Status | Draft |
 | Architecture Contract | `ARCH.md` |
 | Architecture Quality Gate | `ARCH_QGate.md` |
@@ -85,6 +85,12 @@
 %%
 %%
 > [!info] 9. 프로젝트 공통 원칙과 프로젝트 특화 규칙을 구분합니다. 재사용 가능한 공통 방법론은 `AGENTS.md`, 이 프로젝트의 실제 요구·제약은 `SWE1.md`, interactive architecture 기록은 `SWE2.md`, 안정된 설계 결과는 `ARCH.md`, 미완료·실패·deferred 구현 항목은 `SWE3.md`에 둡니다.
+%%
+%%
+> [!info] 10. 실행 단계가 둘 이상이면 각 큰 stage와 필요한 하위 step에 사람이 읽고 Agent가 그대로 재사용할 수 있는 stable ID를 부여합니다. 예를 들어 `S-1`, `S-1.1`, `Step-1` 같은 형식을 프로젝트 안에서 일관되게 사용하고, command, log, Result, failure, retry, handoff에서 같은 ID를 참조하여 사람과 기계가 문제가 발생한 단계를 즉시 같은 이름으로 식별할 수 있게 합니다.
+%%
+%%
+> [!info] 11. 각 큰 stage가 끝날 때마다 다음 stage 또는 다른 사람/Agent로 handoff하기 전에 **small-V exit check**를 수행합니다. 해당 stage의 핵심 산출물이 실제로 동작함을 확인할 수 있는 최소 단위의 unit/smoke/health/interface test와 명시적인 expected result/pass criterion을 정의하고 실행합니다. Actual result가 expected result를 만족한 경우에만 해당 stage를 완료로 표시하고 다음 stage로 진행합니다. 실패하면 현재 stage ID에 failure evidence를 남기고 원인을 해결·재검증하기 전에는 다음 stage로 진행하지 않습니다.
 
 ## 4. 프로젝트별 제약
 
@@ -125,6 +131,10 @@
 - Integration test: TBD
 - Release check: TBD
 - Manual verification: TBD
+- Stage / Step ID convention: TBD
+- Stage exit verification (unit/smoke/health/interface): TBD
+- Expected result / pass criterion: TBD
+- Handoff / next-stage condition: TBD
 
 ## 5. 형상관리와 복구 - SUP.8 inspired
 
