@@ -91,6 +91,12 @@
 %%
 %%
 > [!info] 11. 각 큰 stage가 끝날 때마다 다음 stage 또는 다른 사람/Agent로 handoff하기 전에 **small-V exit check**를 수행합니다. 해당 stage의 핵심 산출물이 실제로 동작함을 확인할 수 있는 최소 단위의 unit/smoke/health/interface test와 명시적인 expected result/pass criterion을 정의하고 실행합니다. Actual result가 expected result를 만족한 경우에만 해당 stage를 완료로 표시하고 다음 stage로 진행합니다. 실패하면 현재 stage ID에 failure evidence를 남기고 원인을 해결·재검증하기 전에는 다음 stage로 진행하지 않습니다.
+%%
+%%
+> [!info] 12. Source 또는 실행 가능한 engineering artifact를 변경한 경우, 작업이 중간에 중단되거나 현재 Agent가 실패·교체되더라도 다음 Agent가 Git history만으로 작업 상태를 복원하고 이어갈 수 있도록 **검증된 coherent checkpoint마다 Git commit을 남깁니다.** Commit에는 가능하면 관련 Stage/Step ID와 변경 목적·검증 상태가 식별되게 하며, 검증되지 않았거나 깨진 상태를 완료 checkpoint로 표현하지 않습니다.
+%%
+%%
+> [!info] 13. **Git commit과 project version/baseline 변경은 별개입니다.** 사용자가 version 또는 baseline 변경을 명시적으로 요구하지 않은 경우, 작업 내용을 commit하더라도 `MAJOR.MINOR.PATCH` 값이나 문서 version을 자동으로 올리지 않습니다. Version 변경은 명시적인 baseline decision으로만 수행합니다.
 
 ## 4. 프로젝트별 제약
 
@@ -154,6 +160,7 @@
 - Baseline identifier는 `MAJOR.MINOR.PATCH` 형태를 사용합니다.
 - 같은 baseline은 process 문서, `ARCH.md`, source, test/evidence의 일관된 상태를 가리켜야 합니다.
 - Architecture 본문 변화가 없어도 전체 project baseline이 변경되면 `ARCH.md` History는 해당 baseline과 동기화할 수 있습니다.
+- Routine Git commit은 baseline/version increment를 의미하지 않습니다. 사용자의 명시적인 version/baseline 변경 요구 또는 승인된 baseline decision이 있을 때만 version을 변경합니다.
 
 ### 5.3. Backup / Recovery
 
