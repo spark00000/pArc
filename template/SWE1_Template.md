@@ -97,6 +97,9 @@
 %%
 %%
 > [!info] 13. **Git commit과 project version/baseline 변경은 별개입니다.** 사용자가 version 또는 baseline 변경을 명시적으로 요구하지 않은 경우, 작업 내용을 commit하더라도 `MAJOR.MINOR.PATCH` 값이나 문서 version을 자동으로 올리지 않습니다. Version 변경은 명시적인 baseline decision으로만 수행합니다.
+%%
+%%
+> [!info] 14. **Interactive progress / heartbeat:** 실행 단계가 둘 이상인 작업은 장시간 침묵하지 않고, 각 의미 있는 stage 또는 blocking tool call 전후에 `Step n/m — <작업>` 형태로 진행 상태를 사용자에게 보고합니다. 시작 전에는 지금 수행할 작업과 예상되는 blocking 지점을, 반환 후에는 실제 완료·실패·검증 결과를 명시합니다. 단일 tool call 자체가 block된 동안 Agent가 별도 메시지를 전송할 수 없는 환경에서는 존재하지 않는 heartbeat나 background progress를 꾸며내지 않으며, tool이 반환되는 즉시 실제 경과와 상태를 보고합니다. Timeout 또는 interruption 후에는 작업이 원복되었다고 가정하지 않고 실제 state를 reconcile한 뒤 retry/continue 여부를 결정합니다.
 
 ## 4. 프로젝트별 제약
 
