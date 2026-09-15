@@ -247,5 +247,10 @@ pArc/
     ├── ARCH_QGate_Template.md
     ├── SWE1_Template.md
     ├── SWE2_Template.md
-    └── SWE3_Template.md
+    ├── SWE3_Template.md
+    └── deployment/
+        ├── README.md
+        ├── deploy-heartbeat.cmd
+        ├── deploy-heartbeat.ps1
+        └── heartbeat.sh
 ```

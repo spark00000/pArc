@@ -133,7 +133,7 @@
 - Secrets: TBD
 - 개인정보/사용자 데이터 처리: TBD
 
-### 4.5. Build / Test / Release
+### 4.5. Build / Test / Release / Deployment
 
 - Build command: TBD
 - Unit test: TBD
@@ -144,6 +144,16 @@
 - Stage exit verification (unit/smoke/health/interface): TBD
 - Expected result / pass criterion: TBD
 - Handoff / next-stage condition: TBD
+- Project-specific deployment artifacts: project-local `deploy/` or equivalent. 실제 host/IP, SSH key, secret, service/container/tool 설치, application source 배포 로직은 각 project repository에서 관리합니다.
+- Reusable deployment starting point: `template/deployment/`의 heartbeat-only skeleton을 복사해 사용합니다. pArc template 자체에는 특정 project의 host/IP/secret/service명을 넣지 않습니다.
+- Minimal template deployment contract:
+  1. `Step n/m` 형식으로 현재 deployment stage를 출력합니다.
+  2. 상태 변경 전에 read-only SSH/preflight를 수행합니다.
+  3. 기존 remote heartbeat가 있으면 timestamp backup을 생성합니다.
+  4. template은 `heartbeat.sh` 한 파일만 전송합니다.
+  5. local/remote SHA-256 일치와 remote `HEARTBEAT=OK` smoke test를 모두 통과해야 완료로 표시합니다.
+  6. verification 실패 시 가능한 경우 직전 heartbeat backup으로 rollback합니다.
+  7. 실제 application/package/service deployment는 template을 복사한 project에서 별도 요구사항·architecture·rollback·health 기준을 정의한 뒤 확장합니다.
 
 ## 5. 형상관리와 복구 - SUP.8 inspired
 
