@@ -102,6 +102,9 @@
 > [!info] 14. **Interactive progress / heartbeat:** 실행 단계가 둘 이상인 작업은 장시간 침묵하지 않고, 각 의미 있는 stage 또는 blocking tool call 전후에 `Step n/m — <작업>` 형태로 진행 상태를 사용자에게 보고합니다. 시작 전에는 지금 수행할 작업과 예상되는 blocking 지점을, 반환 후에는 실제 완료·실패·검증 결과를 명시합니다. 단일 tool call 자체가 block된 동안 Agent가 별도 메시지를 전송할 수 없는 환경에서는 존재하지 않는 heartbeat나 background progress를 꾸며내지 않으며, tool이 반환되는 즉시 실제 경과와 상태를 보고합니다. Timeout 또는 interruption 후에는 작업이 원복되었다고 가정하지 않고 실제 state를 reconcile한 뒤 retry/continue 여부를 결정합니다.
 %%
 %%
+> [!info] 15. **TODO / backlog 관리:** 구현·검증·재시도·보류 등 아직 완료되지 않은 작업은 기본적으로 `SWE3.md`에 기록합니다. GitHub Project를 사용할 수 있는 프로젝트에서는 가능한 경우 각 `SWE3.md` 항목을 GitHub Issue/Project item에도 동기화하여 사람에게 보이는 backlog로 관리합니다. 이때 `SWE3.md`를 authoritative backlog로 유지하고 GitHub Project item에는 원 `SWE3.md` section 또는 stable ID를 역추적할 수 있게 기록합니다.
+%%
+%%
 > [!info] 15. **TODO tracking:** 구현·재시도·보류·후속 작업 등 실행 가능한 TODO는 기본적으로 `SWE3.md`에 기록합니다. GitHub Project가 프로젝트에 구성되어 있고 접근·쓰기 권한이 있으면 해당 TODO를 GitHub Project에도 동기화합니다. `SWE3.md`를 agent-readable authoritative backlog로 유지하고 GitHub Project는 tracking/presentation layer로 사용합니다. Project item에는 가능한 경우 `SWE3.md` section ID를 포함하여 양방향 traceability를 유지합니다. GitHub Project를 사용할 수 없으면 SWE3 기록은 유지하고 동기화하지 못한 이유를 Result에 남깁니다.
 
 ## 4. 프로젝트별 제약
