@@ -113,6 +113,8 @@
 - 생성 허용 directory: TBD
 - 변경 금지 directory/system 영역: TBD
 
+> [!info] **Global path policy:** 신규 Tool/App/SDK/Runtime 등 설치가 필요한 경우 반드시 `E:/APP` 하위에 설치합니다. 모든 project source, repository, generated source tree는 반드시 `E:/SRC` 하위에 둡니다. `E:/APP`과 `E:/SRC` 이외의 directory는 명시적으로 별도 write 권한이 승인되지 않는 한 기본 `read-only`로 취급하며, 기존 설치물을 다른 위치로 이동·재설치하지 않습니다.
+
 ### 4.2. Runtime / Platform
 
 - OS / device / architecture: TBD
