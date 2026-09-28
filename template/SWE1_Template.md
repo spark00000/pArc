@@ -72,7 +72,7 @@
 > [!info] 4. 사용자가 정한 목표와 범위 안에서는 합리적인 가정을 통해 끝까지 진행합니다. 결과를 실질적으로 바꾸는 선택, 새로운 권한, 외부 공개·전송, 복구하기 어려운 작업이 필요할 때만 중단하고 사용자 또는 지정 Authority에게 명시적으로 확인합니다.
 %%
 %%
-> [!info] 5. 변경은 요청 범위에 필요한 최소 단위로 수행하고 실패하면 연쇄적인 추가 변경을 중단합니다. 관련 test, lint, build, release check와 결과물 hash·Git 상태를 위험도에 맞게 검증하며, 검증하지 못한 사항은 완료로 표현하지 않습니다.
+> [!info] 5. 변경은 요청 범위에 필요한 최소 단위로 수행합니다. 검증 `FAIL`은 현재 execution의 종료 조건이며 즉시 `STOP + REPORT`하고 failure evidence와 미완료 상태를 남깁니다. `FAIL` 뒤 자동 repair/retry loop로 들어가지 않으며, 수정은 새로운 traceable execution으로 시작합니다. 동일 실행을 변경 없이 다시 수행하는 retry는 test 결과를 얻지 못한 `ERROR`/`INCONCLUSIVE` 같은 일시적 실행 실패에만 허용합니다. 관련 test, lint, build, release check와 결과물 hash·Git 상태를 위험도에 맞게 검증하며, 검증하지 못한 사항은 완료로 표현하지 않습니다.
 %%
 %%
 > [!info] 6. 공개 source, 비공개 process 문서, 생성 산출물, secret, 개인정보와 외부 service 상태의 경계를 구분합니다. 공개하지 않기로 한 파일은 public branch에서 추적하지 않고, push·release·외부 전송 전에 tracked files, diff, remote, ignore 상태와 민감정보 포함 여부를 확인합니다.
@@ -90,7 +90,7 @@
 > [!info] 10. 실행 단계가 둘 이상이면 각 큰 stage와 필요한 하위 step에 사람이 읽고 Agent가 그대로 재사용할 수 있는 stable ID를 부여합니다. 예를 들어 `S-1`, `S-1.1`, `Step-1` 같은 형식을 프로젝트 안에서 일관되게 사용하고, command, log, Result, failure, retry, handoff에서 같은 ID를 참조하여 사람과 기계가 문제가 발생한 단계를 즉시 같은 이름으로 식별할 수 있게 합니다.
 %%
 %%
-> [!info] 11. 각 큰 stage가 끝날 때마다 다음 stage 또는 다른 사람/Agent로 handoff하기 전에 **small-V exit check**를 수행합니다. 해당 stage의 핵심 산출물이 실제로 동작함을 확인할 수 있는 최소 단위의 unit/smoke/health/interface test와 명시적인 expected result/pass criterion을 정의하고 실행합니다. Actual result가 expected result를 만족한 경우에만 해당 stage를 완료로 표시하고 다음 stage로 진행합니다. 실패하면 현재 stage ID에 failure evidence를 남기고 원인을 해결·재검증하기 전에는 다음 stage로 진행하지 않습니다.
+> [!info] 11. 각 큰 stage가 끝날 때마다 다음 stage 또는 다른 사람/Agent로 handoff하기 전에 **small-V exit check**를 수행합니다. 검증은 가능한 한 작은 단위로 `Step n/m` 순서대로 실행하고 각 step의 command/input, expected result, actual result, PASS/FAIL/ERROR/INCONCLUSIVE 상태를 기록합니다. Actual result가 expected result를 만족한 경우에만 해당 stage를 완료로 표시하고 다음 stage로 진행합니다. `FAIL`이면 해당 step과 현재 execution을 종료하고 failure evidence를 보고합니다. 실패를 숨기기 위해 acceptance criteria, requirement 또는 upstream artifact를 완화·변경하거나 mock/fallback을 원래 deliverable의 완료로 간주하지 않습니다.
 %%
 %%
 > [!info] 12. Source 또는 실행 가능한 engineering artifact를 변경한 경우, 작업이 중간에 중단되거나 현재 Agent가 실패·교체되더라도 다음 Agent가 Git history만으로 작업 상태를 복원하고 이어갈 수 있도록 **검증된 coherent checkpoint마다 Git commit을 남깁니다.** Commit에는 가능하면 관련 Stage/Step ID와 변경 목적·검증 상태가 식별되게 하며, 검증되지 않았거나 깨진 상태를 완료 checkpoint로 표현하지 않습니다.
@@ -99,13 +99,10 @@
 > [!info] 13. **Git commit과 project version/baseline 변경은 별개입니다.** 사용자가 version 또는 baseline 변경을 명시적으로 요구하지 않은 경우, 작업 내용을 commit하더라도 `MAJOR.MINOR.PATCH` 값이나 문서 version을 자동으로 올리지 않습니다. Version 변경은 명시적인 baseline decision으로만 수행합니다.
 %%
 %%
-> [!info] 14. **Interactive progress / heartbeat:** 실행 단계가 둘 이상인 작업은 장시간 침묵하지 않고, 각 의미 있는 stage 또는 blocking tool call 전후에 `Step n/m — <작업>` 형태로 진행 상태를 사용자에게 보고합니다. 시작 전에는 지금 수행할 작업과 예상되는 blocking 지점을, 반환 후에는 실제 완료·실패·검증 결과를 명시합니다. 단일 tool call 자체가 block된 동안 Agent가 별도 메시지를 전송할 수 없는 환경에서는 존재하지 않는 heartbeat나 background progress를 꾸며내지 않으며, tool이 반환되는 즉시 실제 경과와 상태를 보고합니다. Timeout 또는 interruption 후에는 작업이 원복되었다고 가정하지 않고 실제 state를 reconcile한 뒤 retry/continue 여부를 결정합니다.
+> [!info] 14. **Interactive progress / heartbeat:** 실행 단계가 둘 이상인 작업은 장시간 침묵하지 않고 각 의미 있는 stage 또는 blocking tool call 전후에 `Step n/m — <작업>` 형태로 진행 상태를 보고합니다. 같은 step·오류·수정이 반복되거나 observable progress 없이 동일 상태가 되풀이되면 loop/stagnation으로 판정하여 즉시 `STOP + REPORT`합니다. 보고에는 마지막 성공 step, 현재 실패 step, 반복된 시도, 실제 state, 다음에 필요한 corrective action을 포함합니다. 단일 tool call이 block된 동안 별도 메시지를 보낼 수 없는 환경에서는 존재하지 않는 heartbeat/background progress를 꾸며내지 않으며, timeout/interruption 후에는 실제 state를 reconcile하기 전까지 retry/continue하지 않습니다.
 %%
 %%
-> [!info] 15. **TODO / backlog 관리:** 구현·검증·재시도·보류 등 아직 완료되지 않은 작업은 기본적으로 `SWE3.md`에 기록합니다. GitHub Project를 사용할 수 있는 프로젝트에서는 가능한 경우 각 `SWE3.md` 항목을 GitHub Issue/Project item에도 동기화하여 사람에게 보이는 backlog로 관리합니다. 이때 `SWE3.md`를 authoritative backlog로 유지하고 GitHub Project item에는 원 `SWE3.md` section 또는 stable ID를 역추적할 수 있게 기록합니다.
-%%
-%%
-> [!info] 15. **TODO tracking:** 구현·재시도·보류·후속 작업 등 실행 가능한 TODO는 기본적으로 `SWE3.md`에 기록합니다. GitHub Project가 프로젝트에 구성되어 있고 접근·쓰기 권한이 있으면 해당 TODO를 GitHub Project에도 동기화합니다. `SWE3.md`를 agent-readable authoritative backlog로 유지하고 GitHub Project는 tracking/presentation layer로 사용합니다. Project item에는 가능한 경우 `SWE3.md` section ID를 포함하여 양방향 traceability를 유지합니다. GitHub Project를 사용할 수 없으면 SWE3 기록은 유지하고 동기화하지 못한 이유를 Result에 남깁니다.
+> [!info] 15. **TODO / backlog 관리:** 구현·검증·재시도·보류·후속 작업 등 아직 완료되지 않은 작업은 `SWE3.md`에 기록하고 authoritative backlog로 유지합니다. GitHub Project가 구성되어 있고 접근·쓰기 권한이 있으면 가능한 경우 각 항목을 동기화하되, Project item에는 원 `SWE3.md` stable ID/section을 남겨 traceability를 유지합니다. 동기화하지 못하면 그 이유를 Result에 기록합니다.
 
 ## 4. 프로젝트별 제약
 
@@ -152,6 +149,10 @@
 - Stage exit verification (unit/smoke/health/interface): TBD
 - Expected result / pass criterion: TBD
 - Handoff / next-stage condition: TBD
+- Failure termination condition: verification `FAIL` => `STOP + REPORT`; no implicit repair loop
+- Retry eligibility: only `ERROR` / `INCONCLUSIVE` caused by transient execution conditions
+- Loop / stagnation detection: repeated same step/error/change or no observable progress => `STOP + REPORT`
+- Corrective action: starts as a new traceable execution with a new or explicitly continued Step/Execution ID
 - Project-specific deployment artifacts: project-local `deploy/` or equivalent. 실제 host/IP, SSH key, secret, service/container/tool 설치, application source 배포 로직은 각 project repository에서 관리합니다.
 - Reusable deployment starting point: `template/deployment/`의 heartbeat-only skeleton을 복사해 사용합니다. pArc template 자체에는 특정 project의 host/IP/secret/service명을 넣지 않습니다.
 - Minimal template deployment contract:

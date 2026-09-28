@@ -14,45 +14,51 @@ It does not prescribe a particular AI vendor, model family, IDE, cloud, agent ru
 
 ## 2. Core Principles
 
-### P1. Agent-Facing Primacy
+pArc has three primary principles. P4-P10 remain supporting principles that refine how the three primary principles are applied; they are not additional top-level philosophies.
 
-Normative engineering information MUST be available in durable, machine-readable artifacts. Human-facing documentation, wiki pages, dashboards, PDFs, and rendered diagrams are presentation and review layers, not independent sources of truth.
+### 2.1. Primary Principles
 
-### P2. Symmetric Verification
+#### P1. Symmetric V-Model
 
-The lifecycle MUST preserve a V-model relationship between definition and evidence. Requirements, architecture, detailed implementation obligations, and acceptance criteria on the left side MUST have explicit verification evidence on the corresponding right side.
+The lifecycle MUST remain symmetric between definition and verification. Requirements, architecture, implementation obligations, and acceptance semantics on the left side MUST be traceable to corresponding verification obligations and evidence on the right side. Verification MUST evaluate the defined obligation rather than silently redefine it.
 
-### P3. Artifact-Mediated Independence
+#### P2. Machine-Oriented Deliverables
 
-Engineering correctness MUST NOT depend on private conversational memory, a particular chat session, a proprietary agent context, or an individual model. A new qualified agent MUST be able to continue from the baselined engineering artifacts and references.
+Normative engineering information and the SSOT MUST be maintained in durable, machine-readable, versionable, and diffable artifacts whenever practical, such as text, Markdown, Mermaid, source, schemas, tests, and structured data. Human-facing documents, dashboards, PDFs, and rendered diagrams are derived presentation/review layers, not independent sources of truth. The reusable methodology charter (`AGENTS.md`) and mutable project state MUST remain separate; an agent MUST NOT modify `AGENTS.md` during project execution unless directly instructed by the human authority or performing an explicitly authorized pArc methodology update.
 
-### P4. Architecture Sufficiency
+#### P3. Complete Phase Deliverables
+
+Every phase MUST leave a complete handoff for the next phase. "Complete" means that the next qualified agent can receive its next instruction and continue from the baselined artifacts, references, explicit status, unresolved work, and recovery information without private conversational memory or hidden context; it does not mean defect-free. Project continuity MUST therefore remain independent of a particular agent, model, provider, session, or runtime.
+
+### 2.2. Supporting Principles
+
+#### P4. Architecture Sufficiency — supports P3
 
 Downstream implementation MUST start from a sufficiently complete and quality-gated Architecture Contract. Missing architecture MUST NOT be silently reconstructed by an implementation agent as an undocumented design decision.
 
-### P5. Role-Orchestrated Execution
+#### P5. Role-Orchestrated Execution — supports P3
 
 Engineering roles are defined before agents are selected. Each role SHOULD define responsibilities, authority, required inputs, required outputs, competency criteria, independence constraints, and resource requirements. Models and runtimes are replaceable resources assigned to roles.
 
-### P6. Independent Quality Assurance
+#### P6. Independent Quality Assurance — supports P1
 
 The creator of a normative artifact MUST NOT be its sole final approver. Architecture and other critical artifacts SHOULD be reviewed in an independent context; higher-risk work SHOULD use an independently qualified reviewer, potentially a different model or provider.
 
-### P7. Capability-Proportional and Elastic Deployment
+#### P7. Capability-Proportional and Elastic Deployment — supports P3
 
 A role SHOULD be assigned the least costly resource that satisfies its quality, context, modality, latency, reliability, and tool requirements. Capacity MAY be scaled up, scaled down, replicated, or replaced as requirements and measured performance change.
 
-### P8. Complete Knowledge, Bounded Work Context
+#### P8. Complete Knowledge, Bounded Work Context — supports P2/P3
 
 The authoritative knowledge base SHOULD seek completeness. Individual work packages and context deliveries SHOULD be partitioned according to the capability and effective context of the assigned role. Partitioning MUST preserve traceability to the complete Architecture Contract.
 
-### P9. Quantified Resource Economics
+#### P9. Quantified Resource Economics — supports P3
 
 Agent selection and deployment SHOULD consider accepted-output quality together with token use, monetary cost, compute/energy use, latency, throughput, coordination overhead, and rework. Low unit inference cost alone is not sufficient evidence of project efficiency.
 
-### P10. Recursive Baseline Convergence
+#### P10. Recursive Baseline Convergence — supports P3
 
-Exploratory dialogue, implementation iterations, failures, and corrections MAY be rapid and recursive, but accepted outcomes MUST converge into explicit versioned baselines. Stable artifacts MUST contain the current engineering truth; process ledgers preserve how that truth was reached.
+Exploratory dialogue, implementation iterations, failures, and corrections MAY be rapid and recursive, but execution MUST remain bounded and observable and MUST NOT enter an unbounded autonomous repair/retry loop. A verification `FAIL` terminates the current execution and MUST be reported with evidence before corrective work begins as a new traceable execution. Re-execution without a corrective change is reserved for `ERROR`/`INCONCLUSIVE` conditions where the verification result itself could not be determined. Accepted outcomes MUST converge into explicit versioned baselines. Stable artifacts MUST contain the current engineering truth; process ledgers preserve how that truth was reached.
 
 ## 3. Lifecycle Model
 
@@ -231,6 +237,7 @@ A project MUST maintain recoverable, versioned baselines for normative artifacts
 - Existing user work and worktree changes are user-owned unless explicitly superseded.
 - Changes SHOULD be minimal and scoped to the stated objective.
 - Failed or unverified work MUST NOT be reported as complete.
+- An agent MUST NOT make a result appear successful by weakening requirements or acceptance criteria, rewriting upstream artifacts to fit a failed implementation, substituting mock/fallback behavior for the requested deliverable, promoting `FAIL`/`NOT RUN`/`INCONCLUSIVE` to complete, or hiding unresolved work. If an upstream change is genuinely required, the current execution MUST stop and the change MUST be handled explicitly as a new traceable decision/execution.
 - Public, private, generated, secret, and external-service boundaries MUST be explicit.
 - A baseline version SHOULD identify the coherent state of process artifacts, Architecture Contract, source, tests, and evidence.
 
