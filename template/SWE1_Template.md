@@ -137,6 +137,8 @@
 - Private artifacts: TBD
 - Secrets: TBD
 - 개인정보/사용자 데이터 처리: TBD
+- `.runtime/`는 **사용자별 secure 정보 전용**으로 사용합니다. 예: SSH private key, API/secret key, access token, 사용자 ID/PW, 계정별 인증 material. 일반 PID/state, request dump, test log, test evidence, recovery snapshot, upload/temp file, fixture를 `.runtime/`에 저장하지 않습니다.
+- `.runtime/` 전체는 Git 추적 금지이며, secret 값은 log/test artifact에 복사하거나 출력하지 않습니다.
 
 ### 4.5. Build / Test / Release / Deployment
 
@@ -145,6 +147,11 @@
 - Integration test: TBD
 - Release check: TBD
 - Manual verification: TBD
+- Raw test/PoC log root: `test/log/` (local raw logs, stdout/stderr, request/response dump, diagnostic JSON/JSONL 포함)
+- Persistent human-readable test result/report: `test/reports/` 또는 해당 프로젝트가 정의한 `test/` 하위 경로
+- Test/adapter temporary materialization: `test/tmp/`
+- Git만으로 복구할 수 없는 검증용 snapshot/export가 불가피한 경우: `test/recovery/`; Git으로 복구 가능한 source에는 별도 recovery copy를 만들지 않습니다.
+- Test 관련 산출물은 프로젝트 root의 임의 `evidence/` 또는 `.runtime/`에 분산하지 않고 `test/` 아래에서 관리합니다.
 - Stage / Step ID convention: TBD
 - Stage exit verification (unit/smoke/health/interface): TBD
 - Expected result / pass criterion: TBD
@@ -180,14 +187,14 @@
 ### 5.2. Baseline
 
 - Baseline identifier는 `MAJOR.MINOR.PATCH` 형태를 사용합니다.
-- 같은 baseline은 process 문서, `ARCH.md`, source, test/evidence의 일관된 상태를 가리켜야 합니다.
+- 같은 baseline은 process 문서, `ARCH.md`, source, `test/` artifact의 일관된 상태를 가리켜야 합니다.
 - Architecture 본문 변화가 없어도 전체 project baseline이 변경되면 `ARCH.md` History는 해당 baseline과 동기화할 수 있습니다.
 - Routine Git commit은 baseline/version increment를 의미하지 않습니다. 사용자의 명시적인 version/baseline 변경 요구 또는 승인된 baseline decision이 있을 때만 version을 변경합니다.
 
 ### 5.3. Backup / Recovery
 
 - Git으로 완전 복구 가능한 경우 Git commit/ref/blob를 우선합니다.
-- Git 밖의 상태는 대상별 export/snapshot/restore point 등 적절한 수단을 정의합니다.
+- Git 밖의 상태는 대상별 export/snapshot/restore point 등 적절한 수단을 정의합니다. 프로젝트 내부에 local recovery artifact를 둘 필요가 있으면 `test/recovery/`를 사용하며 `.runtime/`에는 두지 않습니다.
 - 복구 수단은 작업 전에 생성하고 식별자/hash/commit 등으로 검증합니다.
 
 ## 6. 역할·자원·예산 - MAN.3 inspired
