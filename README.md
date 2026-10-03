@@ -20,6 +20,7 @@ pArc is an architecture-centered engineering process for AI agents. It treats AI
 - [Position Paper v0.0.0 — PDF](docs/pArc_Position_Paper_v0.0.0.pdf)
 - [Architecture Contract](docs/ARCH.md)
 - [Architecture QGate](docs/ARCH_QGate.md)
+- [Agentic Engineering Reference Landscape](refs/Agentic_Engineering_Reference_Landscape.md)
 - [pArc Charter](AGENTS.md)
 - [Project Templates](template/)
 
@@ -130,6 +131,7 @@ pArc는 AI Agent를 단일 assistant가 아니라 교체·분산·확장 가능�
 - [Position Paper v0.0.0 — PDF](docs/pArc_Position_Paper_v0.0.0.pdf)
 - [Architecture Contract](docs/ARCH.md)
 - [Architecture QGate](docs/ARCH_QGate.md)
+- [Agentic Engineering 기술 조사표](refs/Agentic_Engineering_Reference_Landscape.md)
 - [pArc Charter](AGENTS.md)
 - [Project Templates](template/)
 
