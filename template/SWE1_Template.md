@@ -103,6 +103,9 @@
 %%
 %%
 > [!info] 15. **TODO / backlog 관리:** 구현·검증·재시도·보류·후속 작업 등 아직 완료되지 않은 작업은 `SWE3.md`에 기록하고 authoritative backlog로 유지합니다. GitHub Project가 구성되어 있고 접근·쓰기 권한이 있으면 가능한 경우 각 항목을 동기화하되, Project item에는 원 `SWE3.md` stable ID/section을 남겨 traceability를 유지합니다. 동기화하지 못하면 그 이유를 Result에 기록합니다.
+%%
+%%
+> [!info] 16. **SPARK-first execution:** 로컬 파일·source·repository·command 실행을 포함한 모든 실제 작업은 기본적으로 **SPARK**를 사용하여 수행합니다. SPARK의 제공 기능·권한·allowed-root 또는 실행 제약 때문에 해당 작업을 도저히 수행할 수 없는 경우에만 Work mode 사용을 요청할 수 있습니다. 이때 먼저 SPARK로 수행할 수 없는 구체적이고 검증 가능한 이유를 설명하고, Work mode가 필요한 범위와 목적을 명시하여 사용자 승인을 요청합니다. 단순 편의, 익숙함, 성능 추정만으로 SPARK를 우회하지 않습니다.
 
 ## 4. 프로젝트별 제약
 
